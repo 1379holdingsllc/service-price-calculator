@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Service Price Calculator – Is Your Quote Fair? (2026)</title>
+<meta name="description" content="Free calculator: estimate a fair price range for pressure washing, junk removal, carpet, gutter, dryer vent, window and roof cleaning using published 2026 cost data.">
+<link rel="canonical" href="https://jojothebest30-stack.github.io/service-price-calculator/">
+<style>*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,Segoe UI,Roboto,sans-serif;background:#f4f7fa;color:#1d2433}
+header{background:#123a5c;color:#fff;padding:16px}header .w{display:flex;justify-content:space-between;align-items:center}.w{max-width:760px;margin:auto;padding:0 16px}
+.card{background:#fff;border:1px solid #dfe5ec;border-radius:10px;padding:20px;margin:20px 0}label{display:block;font-weight:600;margin-top:12px}
+select,input{width:100%;padding:10px;font-size:16px;border:1px solid #c7d0db;border-radius:6px}.res{font-size:28px;font-weight:700;color:#2e7d32;margin:10px 0}
+.btn{display:inline-block;background:#f9a825;color:#1d2433;font-weight:700;padding:10px 18px;border-radius:6px;text-decoration:none;border:0;cursor:pointer}
+.small{font-size:13px;color:#5b6576}table{width:100%;border-collapse:collapse;font-size:14px}td,th{border:1px solid #dfe5ec;padding:6px}.pro{opacity:.55}
+.verdict{padding:10px;border-radius:6px;margin-top:10px}footer{padding:24px 16px;font-size:13px;color:#5b6576;text-align:center}</style></head><body>
+<header><div class="w"><strong>Service Price Calculator</strong><a class="btn" href="pro.html">Go Pro</a></div></header>
+<main class="w">
+<div class="card"><h1 style="margin-top:0;font-size:26px">Is your home-service quote fair?</h1>
+<p>Pick a service, enter the size of the job, and see the typical national price range reported by published 2026 cost surveys. Optionally enter a quote you received to see how it compares.</p>
+<label for="svc">Service</label><select id="svc"></select>
+<label for="qty" id="qlab">Quantity</label><input id="qty" type="number" min="0" step="any">
+<label for="quote">Quote you received (optional, $)</label><input id="quote" type="number" min="0" step="any">
+<div class="res" id="out">–</div><div id="verdict"></div>
+<p class="small" id="src"></p></div>
+<div class="card"><h2 style="margin-top:0">Free vs. Pro</h2>
+<table><tr><th>Feature</th><th>Free</th><th>Pro (coming soon)</th></tr>
+<tr><td>National price ranges, 8 services</td><td>✔</td><td>✔</td></tr><tr><td>Quote fairness check</td><td>✔</td><td>✔</td></tr>
+<tr><td>Atlanta &amp; metro-area adjustments</td><td>–</td><td>✔</td></tr><tr><td>Contractor mode: your own rates, markup &amp; minimums</td><td>–</td><td>✔</td></tr>
+<tr><td>Printable branded estimate / PDF</td><td>–</td><td>✔</td></tr><tr><td>Saved jobs &amp; multi-service bundles</td><td>–</td><td>✔</td></tr></table>
+<p><a class="btn" href="pro.html">Go Pro – planned $3/month</a></p></div>
+<p class="small">Estimates only. Ranges are compiled from the cited third-party sources and are not quotes. Actual prices vary by location, property and provider.</p>
+</main>
+<footer>&copy; 1379 Holdings LLC · Atlanta, GA · (470) 279-6694 · <a href="https://jojothebest30-stack.github.io/home-cost-guides/">Cost guides</a> · <a href="privacy.html">Privacy</a></footer>
+<script>
+const S={
+pw:{n:"Pressure washing – house exterior",u:"House square feet",lo:.10,hi:.50,min:150,s:"Angi 2026: $0.10–$0.50/sq ft; HomeGuide minimums $150–$400"},
+junk:{n:"Junk removal",u:"Fraction of a truck (e.g. 0.5)",t:"truck",s:"Angi 2026 truckload table: 1/8 $75–125 … full $600–800"},
+carpet:{n:"Carpet cleaning",u:"Number of rooms",t:"carpet",s:"HomeGuide per-room table (basic cleaning)"},
+gutter1:{n:"Gutter cleaning – 1 story",u:"Linear feet of gutter",lo:.95,hi:1.25,min:100,s:"Angi 2026: $0.95–$1.25/linear ft (1 story)"},
+gutter2:{n:"Gutter cleaning – 2 story",u:"Linear feet of gutter",lo:1.00,hi:1.85,min:100,s:"Angi 2026: $1.00–$1.85/linear ft (2 story)"},
+dryer:{n:"Dryer vent cleaning",u:"Vent location: 1=1st floor, 2=2nd floor, 3=roof",t:"dryer",s:"Angi/HomeGuide 2026: $80–150 / $110–185 / $150–250"},
+window:{n:"Window cleaning – whole home",u:"Number of homes (1)",lo:150,hi:302,s:"Angi 2026: most jobs $150–$302"},
+roof:{n:"Roof cleaning (soft wash)",u:"Number of roofs (1)",lo:296,hi:626,s:"Angi 2026: most jobs $296–$626"},
+office:{n:"Office cleaning – per visit",u:"Office square feet",lo:.07,hi:.15,min:0,s:"CleanQuote benchmark: ~$0.07–$0.15/sq ft per visit"}};
+const sel=document.getElementById('svc');for(const k in S)sel.add(new Option(S[k].n,k));
+const f=x=>'$'+Math.round(x).toLocaleString();
+function calc(){const s=S[sel.value],q=parseFloat(qty.value);qlab.textContent=s.u;src.textContent='Source basis: '+s.s;
+ if(!(q>0)){out.textContent='–';verdict.innerHTML='';return}let lo,hi;
+ if(s.t=='truck'){const T=[[.125,75,125],[.25,125,200],[.5,200,400],[.75,400,600],[1,600,800]];let r=T.find(t=>q<=t[0])||T[4];const n=Math.ceil(q);if(q>1){lo=600*Math.floor(q);hi=800*Math.floor(q);const rem=q-Math.floor(q);if(rem>0){const rr=T.find(t=>rem<=t[0]);lo+=rr[1];hi+=rr[2]}}else{lo=r[1];hi=r[2]}}
+ else if(s.t=='carpet'){const P=[[100,150],[75,100],[65,75],[50,65],[40,50]];const p=P[Math.min(Math.round(q),5)-1]||P[4];lo=p[0]*q;hi=p[1]*q}
+ else if(s.t=='dryer'){const D={1:[80,150],2:[110,185],3:[150,250]}[Math.round(q)]||[80,150];[lo,hi]=D}
+ else if(s.u.startsWith('Number of')){lo=s.lo*q;hi=s.hi*q}
+ else{lo=Math.max(s.lo*q,s.min||0);hi=Math.max(s.hi*q,s.min||0)}
+ out.textContent=f(lo)+' – '+f(hi);const v=parseFloat(quote.value);
+ if(v>0){let m,c;if(v<lo*.8){m='Below the typical range – confirm what is included.';c='#fff8e1'}else if(v>hi*1.2){m='Above the typical range – ask what drives the price, or get another quote.';c='#ffebee'}else{m='Within (or near) the typical range.';c='#e8f5e9'}verdict.innerHTML='<div class="verdict" style="background:'+c+'">'+m+'</div>'}else verdict.innerHTML=''}
+[sel,qty,quote].forEach(e=>e.addEventListener('input',calc));calc();
+</script></body></html>

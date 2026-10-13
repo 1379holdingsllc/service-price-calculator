@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jojothebest30-stack.github.io/service-price-calculator/sitemap.xml
